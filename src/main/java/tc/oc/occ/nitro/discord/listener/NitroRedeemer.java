@@ -96,7 +96,7 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                         .append(
                             ":negative_squared_cross_mark: "
                                 + user.getMentionTag()
-                                + " Only Nitro Boosters can use this command! Support Warzone by boosting the server!")
+                                + " Only Nitro Boosters can use this command! Support us by boosting the server!")
                         .send(event.getChannel());
                   }
                 });

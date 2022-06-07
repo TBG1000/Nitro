@@ -51,8 +51,13 @@ public class NitroListener implements Listener {
     for (int i = 0; i < commandsToExecute.length; i++) {
       Bukkit.getConsoleSender()
           .sendMessage("[Nitro] Command " + (i + 1) + ": " + commandsToExecute[i]);
-      // Execute the command
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+      // If the command contains the placeholder %s, replace it with the player's name
+      if (commandsToExecute[i].contains("%s")) {
+        Bukkit.dispatchCommand(
+            Bukkit.getConsoleSender(), commandsToExecute[i].replace("%s", parts[2]));
+      } else {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+      }
     }
     api.getConfig().save(plugin.getConfig());
     plugin.saveConfig();
@@ -92,8 +97,12 @@ public class NitroListener implements Listener {
     for (int i = 0; i < commandsToExecute.length; i++) {
       Bukkit.getConsoleSender()
           .sendMessage("[Nitro] Command " + (i + 1) + ": " + commandsToExecute[i]);
-      // Execute the command
-      Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+      if (commandsToExecute[i].contains("%s")) {
+        Bukkit.dispatchCommand(
+            Bukkit.getConsoleSender(), commandsToExecute[i].replace("%s", parts[2]));
+      } else {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+      }
     }
     api.getConfig().removeNitro(event.getUser());
     api.getConfig().save(plugin.getConfig());
