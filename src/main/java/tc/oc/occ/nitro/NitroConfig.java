@@ -73,16 +73,19 @@ public class NitroConfig {
     return nitroUsers;
   }
 
-  public String getRedemptionCommand(String playerId) {
-    return String.format(redemptionCommand, playerId);
+  public String[] getRedemptionCommand(String playerId) {
+    String[] commands = redemptionCommand.split(":");
+    return commands;
   }
 
-  public String getRemovalCommand(String playerId) {
-    return String.format(removalCommand, playerId);
+  public String[] getRemovalCommand(String playerId) {
+    String[] commands = removalCommand.split(":");
+    return commands;
   }
 
-  public NitroUser addNitro(String discordId, UUID playerId) {
-    NitroUser user = new NitroUser(discordId, playerId);
+  public NitroUser addNitro(
+      String discriminatedUsername, String discordId, String minecraftUsername, UUID playerId) {
+    NitroUser user = new NitroUser(discriminatedUsername, discordId, minecraftUsername, playerId);
     this.nitroUsers.add(user);
     return user;
   }

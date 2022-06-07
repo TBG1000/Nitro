@@ -1,5 +1,7 @@
 package tc.oc.occ.nitro.discord.listener;
 
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
@@ -29,31 +31,50 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                     String[] parts = event.getMessage().getContent().split(" ");
 
                     if (parts.length == 2) {
+                      String discriminatedUsername =
+                          event.getMessageAuthor().getDiscriminatedName();
                       String discordId = event.getMessageAuthor().getIdAsString();
                       String username = parts[1].replace("@", "").trim();
 
                       if (config.getUser(discordId).isPresent()) {
                         NitroUser nitro = config.getUser(discordId).get();
+                        String minecraftUsername =
+                            Bukkit.getPlayer(UUID.fromString(nitro.getPlayerId().toString()))
+                                .getName();
                         new MessageBuilder()
                             .append(
-                                "<:nitro:842826131581566976> Your nitro rank has already been claimed for (`"
+                                ":negative_squared_cross_mark: "
+                                    + user.getMentionTag()
+                                    + " Your Nitro Boosting privileges have already been claimed for `"
+                                    + minecraftUsername
+                                    + "` (`"
                                     + nitro.getPlayerId().toString()
-                                    + "`)")
+                                    + "`).")
                             .send(event.getChannel());
                       } else {
                         WebUtils.getUUID(username)
                             .thenAcceptAsync(
                                 uuid -> {
                                   if (uuid != null) {
-                                    NitroUser nitro = config.addNitro(discordId, uuid);
+                                    String minecraftUsername =
+                                        Bukkit.getPlayer(UUID.fromString(uuid.toString()))
+                                            .getName();
+                                    NitroUser nitro =
+                                        config.addNitro(
+                                            discriminatedUsername,
+                                            discordId,
+                                            minecraftUsername,
+                                            uuid);
                                     NitroCloudy.get().callSyncEvent(new NitroUserAddEvent(nitro));
                                     new MessageBuilder()
                                         .append(
-                                            "<:nitro:842826131581566976>"
+                                            ":white_check_mark: "
                                                 + user.getMentionTag()
-                                                + " Your nitro rank has been linked to `"
-                                                + username
-                                                + "`")
+                                                + " Your Nitro Boosting privileges have been claimed for `"
+                                                + nitro.getMinecraftUsername()
+                                                + "` (`"
+                                                + nitro.getPlayerId().toString()
+                                                + "`). Thanks for boosting the server!")
                                         .send(event.getChannel());
                                   } else {
                                     api.alert(
@@ -73,9 +94,9 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                   } else {
                     new MessageBuilder()
                         .append(
-                            "<:nitro:842826131581566976> "
+                            ":negative_squared_cross_mark: "
                                 + user.getMentionTag()
-                                + " Only nitro boosters can use this command!")
+                                + " Only Nitro Boosters can use this command! Support Warzone by boosting the server!")
                         .send(event.getChannel());
                   }
                 });

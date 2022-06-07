@@ -7,9 +7,14 @@ public class NitroUser {
 
   private String discordId;
   private UUID playerId;
+  private String discriminatedUsername;
+  private String minecraftUsername;
 
-  public NitroUser(String discordId, UUID playerId) {
+  public NitroUser(
+      String discriminatedUsername, String discordId, String minecraftUsername, UUID playerId) {
+    this.discriminatedUsername = discriminatedUsername;
     this.discordId = discordId;
+    this.minecraftUsername = minecraftUsername;
     this.playerId = playerId;
   }
 
@@ -21,9 +26,18 @@ public class NitroUser {
     return playerId;
   }
 
+  public String getDiscriminatedUsername() {
+    return discriminatedUsername;
+  }
+
+  public String getMinecraftUsername() {
+    return minecraftUsername;
+  }
+
   @Override
   public String toString() {
-    return String.format("%s:%s", discordId, playerId.toString());
+    return String.format(
+        "%s:%s:%s:%s", discriminatedUsername, discordId, minecraftUsername, playerId.toString());
   }
 
   @Override
@@ -34,10 +48,12 @@ public class NitroUser {
 
   public static NitroUser of(String data) {
     String[] parts = data.split(":");
-    if (parts.length == 2) {
-      String discord = parts[0];
-      String uuidStr = parts[1];
-      return new NitroUser(discord, UUID.fromString(uuidStr));
+    if (parts.length == 4) {
+      String discordName = parts[0];
+      String discordId = parts[1];
+      String minecraftName = parts[2];
+      String uuidStr = parts[3];
+      return new NitroUser(discordName, discordId, minecraftName, UUID.fromString(uuidStr));
     }
     return null;
   }
