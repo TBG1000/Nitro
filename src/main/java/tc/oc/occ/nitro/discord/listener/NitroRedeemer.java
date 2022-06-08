@@ -38,15 +38,12 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
 
                       if (config.getUser(discordId).isPresent()) {
                         NitroUser nitro = config.getUser(discordId).get();
-                        String minecraftUsername =
-                            Bukkit.getPlayer(UUID.fromString(nitro.getPlayerId().toString()))
-                                .getName();
                         new MessageBuilder()
                             .append(
                                 ":negative_squared_cross_mark: "
                                     + user.getMentionTag()
                                     + " Your Nitro Boosting privileges have already been claimed for `"
-                                    + minecraftUsername
+                                    + nitro.getMinecraftUsername()
                                     + "` (`"
                                     + nitro.getPlayerId().toString()
                                     + "`).")
