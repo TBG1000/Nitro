@@ -69,9 +69,9 @@ public class NitroListener implements Listener {
     api.alert(
         ":no_entry_sign: Nitro Boosting privileges have been removed from `"
             + parts[2]
-            + " ("
+            + "` (`"
             + parts[3]
-            + "). The user `"
+            + "`). The user `"
             + parts[0]
             + "` (`"
             + parts[1]
@@ -79,15 +79,15 @@ public class NitroListener implements Listener {
     // Announce in console that the user has lost nitro
     Bukkit.getConsoleSender()
         .sendMessage(
-            "[Nitro] Removing Nitro Boosting privileges from `"
+            "[Nitro] Removing Nitro Boosting privileges from "
                 + parts[2]
-                + "` (`"
+                + " ("
                 + parts[3]
-                + "`). The user `"
+                + "). The user "
                 + parts[0]
-                + "` (`"
+                + " ("
                 + parts[1]
-                + "`) is no longer boosting the server.");
+                + ") is no longer boosting the server.");
     String[] commandsToExecute =
         api.getConfig().getRemovalCommand(event.getUser().getPlayerId().toString());
     // Print amount of commands to be executed

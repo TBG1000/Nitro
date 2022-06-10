@@ -4,6 +4,7 @@ import java.util.Optional;
 import java.util.logging.Logger;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
+import org.javacord.api.entity.intent.Intent;
 import org.javacord.api.entity.server.Server;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.listener.NitroAddAlert;
@@ -33,7 +34,8 @@ public class DiscordBot {
       new DiscordApiBuilder()
           .setToken(config.getToken())
           .setWaitForServersOnStartup(false)
-          .setWaitForUsersOnStartup(false)
+          .setIntents(Intent.GUILD_MEMBERS)
+          .setAllIntents()
           .login()
           .thenAcceptAsync(
               api -> {

@@ -55,6 +55,8 @@ You'll find the bot's `.jar` file inside the `target` folder of the project's ro
 You may also find a pre-built `.jar` [here](https://github.com/TBG1000/Nitro/actions/workflows/main.yml).
 
 ## Installing
+When creating the bot that will be linked to Nitro's plugin `.jar`, be sure to toggle on the "Server Members Intent" (`GUILD_MEMBERS`) option. If this setting is left off, the bot will not be able to properly function. It will fail to remove privileges from users that were previously Nitro Boosters but have since stopped boosting the server.
+
 1. Drop the plugin's `.jar` in your server's `plugins` folder.
 2. Restart the server to automatically generate the bot's required files (`config.yml`, `plugin.yml`).
 3. Fill in the blanks of the configuration file (`config.yml`). To do this, you'll need the following:
