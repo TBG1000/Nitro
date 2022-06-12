@@ -47,27 +47,17 @@ public class NitroListener implements Listener {
     // Print amount of commands to be executed
     Bukkit.getConsoleSender()
         .sendMessage("[Nitro] Executing " + commandsToExecute.length + " command(s)");
-    // Execute commands
-    if (commandsToExecute.length == 1) {
-      Bukkit.getServer()
-          .dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[0].replace("%s", parts[2]));
-    } else {
-      Bukkit.getScheduler()
-          .runTaskLater(
-              plugin,
-              () ->
-                  Bukkit.getServer()
-                      .dispatchCommand(
-                          Bukkit.getConsoleSender(), commandsToExecute[0].replace("%s", parts[2])),
-              20 * 2);
-      Bukkit.getScheduler()
-          .runTaskLater(
-              plugin,
-              () ->
-                  Bukkit.getServer()
-                      .dispatchCommand(
-                          Bukkit.getConsoleSender(), commandsToExecute[1].replace("%s", parts[2])),
-              20 * 4);
+    // Print the commands
+    for (int i = 0; i < commandsToExecute.length; i++) {
+      Bukkit.getConsoleSender()
+          .sendMessage("[Nitro] Command " + (i + 1) + ": " + commandsToExecute[i]);
+      // If the command contains the placeholder %s, replace it with the player's name
+      if (commandsToExecute[i].contains("%s")) {
+        Bukkit.dispatchCommand(
+            Bukkit.getConsoleSender(), commandsToExecute[i].replace("%s", parts[2]));
+      } else {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+      }
     }
     api.getConfig().save(plugin.getConfig());
     plugin.saveConfig();
@@ -103,27 +93,16 @@ public class NitroListener implements Listener {
     // Print amount of commands to be executed
     Bukkit.getConsoleSender()
         .sendMessage("[Nitro] Executing " + commandsToExecute.length + " command(s)");
-    // Execute commands
-    if (commandsToExecute.length == 1) {
-      Bukkit.getServer()
-          .dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[0].replace("%s", parts[2]));
-    } else {
-      Bukkit.getScheduler()
-          .runTaskLater(
-              plugin,
-              () ->
-                  Bukkit.getServer()
-                      .dispatchCommand(
-                          Bukkit.getConsoleSender(), commandsToExecute[0].replace("%s", parts[2])),
-              20 * 2);
-      Bukkit.getScheduler()
-          .runTaskLater(
-              plugin,
-              () ->
-                  Bukkit.getServer()
-                      .dispatchCommand(
-                          Bukkit.getConsoleSender(), commandsToExecute[1].replace("%s", parts[2])),
-              20 * 4);
+    // Print the commands
+    for (int i = 0; i < commandsToExecute.length; i++) {
+      Bukkit.getConsoleSender()
+          .sendMessage("[Nitro] Command " + (i + 1) + ": " + commandsToExecute[i]);
+      if (commandsToExecute[i].contains("%s")) {
+        Bukkit.dispatchCommand(
+            Bukkit.getConsoleSender(), commandsToExecute[i].replace("%s", parts[2]));
+      } else {
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+      }
     }
     api.getConfig().removeNitro(event.getUser());
     api.getConfig().save(plugin.getConfig());

@@ -1,5 +1,7 @@
 package tc.oc.occ.nitro.discord.listener;
 
+import java.util.UUID;
+import org.bukkit.Bukkit;
 import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
@@ -51,9 +53,15 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                             .thenAcceptAsync(
                                 uuid -> {
                                   if (uuid != null) {
+                                    String minecraftUsername =
+                                        Bukkit.getPlayer(UUID.fromString(uuid.toString()))
+                                            .getName();
                                     NitroUser nitro =
                                         config.addNitro(
-                                            discriminatedUsername, discordId, username, uuid);
+                                            discriminatedUsername,
+                                            discordId,
+                                            minecraftUsername,
+                                            uuid);
                                     NitroCloudy.get().callSyncEvent(new NitroUserAddEvent(nitro));
                                     new MessageBuilder()
                                         .append(
