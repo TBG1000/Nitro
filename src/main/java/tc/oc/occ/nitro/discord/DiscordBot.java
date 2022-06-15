@@ -34,7 +34,8 @@ public class DiscordBot {
       new DiscordApiBuilder()
           .setToken(config.getToken())
           .setWaitForServersOnStartup(false)
-          .setIntents(Intent.GUILDS, Intent.GUILD_MEMBERS, Intent.GUILD_PRESENCES, Intent.GUILD_MESSAGES)
+          .setIntents(
+              Intent.GUILDS, Intent.GUILD_MEMBERS, Intent.GUILD_PRESENCES, Intent.GUILD_MESSAGES)
           .login()
           .thenAcceptAsync(
               api -> {

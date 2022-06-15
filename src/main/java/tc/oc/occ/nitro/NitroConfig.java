@@ -20,8 +20,8 @@ public class NitroConfig {
   private String alertChannel;
   private String mainChannel;
 
-  private String redemptionCommand;
-  private String removalCommand;
+  private List<String> redemptionCommands;
+  private List<String> removalCommands;
 
   public NitroConfig(Configuration config) {
     reload(config);
@@ -34,8 +34,8 @@ public class NitroConfig {
     this.nitroRole = config.getString("nitro-role");
     this.alertChannel = config.getString("channel-alerts");
     this.mainChannel = config.getString("channel-main");
-    this.redemptionCommand = config.getString("redemption-command");
-    this.removalCommand = config.getString("remove-command");
+    this.redemptionCommands = config.getStringList("redemption-commands");
+    this.removalCommands = config.getStringList("removal-commands");
 
     List<String> nitroData = config.getStringList("nitro-boosters");
     this.nitroUsers =
@@ -73,14 +73,12 @@ public class NitroConfig {
     return nitroUsers;
   }
 
-  public String[] getRedemptionCommand(String playerId) {
-    String[] commands = redemptionCommand.split(":");
-    return commands;
+  public List<String> getRedemptionCommands(String playerId) {
+    return redemptionCommands;
   }
 
-  public String[] getRemovalCommand(String playerId) {
-    String[] commands = removalCommand.split(":");
-    return commands;
+  public List<String> getRemovalCommands(String playerId) {
+    return removalCommands;
   }
 
   public NitroUser addNitro(

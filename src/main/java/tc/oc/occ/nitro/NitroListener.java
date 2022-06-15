@@ -42,21 +42,15 @@ public class NitroListener implements Listener {
                 + " ("
                 + parts[3]
                 + ")");
-    String[] commandsToExecute =
-        api.getConfig().getRedemptionCommand(event.getUser().getPlayerId().toString());
-    // Print amount of commands to be executed
-    Bukkit.getConsoleSender()
-        .sendMessage("[Nitro] Executing " + commandsToExecute.length + " command(s)");
-    // Print the commands
-    for (int i = 0; i < commandsToExecute.length; i++) {
-      Bukkit.getConsoleSender()
-          .sendMessage("[Nitro] Command " + (i + 1) + ": " + commandsToExecute[i]);
-      // If the command contains the placeholder %s, replace it with the player's name
-      if (commandsToExecute[i].contains("%s")) {
-        Bukkit.dispatchCommand(
-            Bukkit.getConsoleSender(), commandsToExecute[i].replace("%s", parts[2]));
+    // Iterate through the list of strings from redemption-commands in the config
+    for (String redemptionCommand :
+        api.getConfig().getRedemptionCommands(event.getUser().getPlayerId().toString())) {
+      // Execute the command
+      if (redemptionCommand.contains("%s")) {
+        Bukkit.getServer()
+            .dispatchCommand(Bukkit.getConsoleSender(), redemptionCommand.replace("%s", parts[2]));
       } else {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), redemptionCommand);
       }
     }
     api.getConfig().save(plugin.getConfig());
@@ -88,20 +82,15 @@ public class NitroListener implements Listener {
                 + " ("
                 + parts[1]
                 + ") is no longer boosting the server.");
-    String[] commandsToExecute =
-        api.getConfig().getRemovalCommand(event.getUser().getPlayerId().toString());
-    // Print amount of commands to be executed
-    Bukkit.getConsoleSender()
-        .sendMessage("[Nitro] Executing " + commandsToExecute.length + " command(s)");
-    // Print the commands
-    for (int i = 0; i < commandsToExecute.length; i++) {
-      Bukkit.getConsoleSender()
-          .sendMessage("[Nitro] Command " + (i + 1) + ": " + commandsToExecute[i]);
-      if (commandsToExecute[i].contains("%s")) {
-        Bukkit.dispatchCommand(
-            Bukkit.getConsoleSender(), commandsToExecute[i].replace("%s", parts[2]));
+    // Iterate through the list of strings from removal-commands in the config
+    for (String removalCommand :
+        api.getConfig().getRemovalCommands(event.getUser().getPlayerId().toString())) {
+      // Execute the command
+      if (removalCommand.contains("%s")) {
+        Bukkit.getServer()
+            .dispatchCommand(Bukkit.getConsoleSender(), removalCommand.replace("%s", parts[2]));
       } else {
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), commandsToExecute[i]);
+        Bukkit.getServer().dispatchCommand(Bukkit.getConsoleSender(), removalCommand);
       }
     }
     api.getConfig().removeNitro(event.getUser());

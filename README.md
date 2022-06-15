@@ -9,25 +9,32 @@ This plugin was originally created for use on [Overcast Community](https://oc.tc
 
 - Nitro Boosting privileges can be claimed or redeemed by users to the Minecraft account/player of their choice. To do this, simply instruct the user to enter `!nitro <user>` into the designated redemption channel (specified in `config.yml` through `channel-main`).
 
-- When the user does redeem Nitro privileges, the plugin will execute, through the console, the commands present in `redemption-command`. A similar process will take place once the user stops boosting the server or loses the "boosting" role (meaning the removal commands will be executed).
+- When the user does redeem Nitro privileges, the plugin will execute, through the console, the commands present in `redemption-commands`. A similar process will take place once the user stops boosting the server or loses the "boosting" role (meaning the removal commands will be executed).
 
-- This particular fork allows you to configure more than one redemption or removal command. To do this, you must separate each individual command by using a semicolon (`:`). For example:
+- This particular fork allows you to configure more than one redemption or removal command. To do this, you must simply create a list of the commands you would like to execute. For example:
 ```yml
-redemption-command: say hello!:say welcome!   
-remove-command: say goodbye!:say see you later!
-
-# You may also use the %s placeholder to refer to the Minecraft username of the user.
-# Useful for giving permissions, ranks, etc. The below example considers using LuckPerms.
-redemption-command: lp user %s parent add nitro-boost
+redemption-commands:
+  - say Welcome!
+  - say Thank you for boosting the server!
+removal-commands:
+  - say We're sorry to see you go!
+  - say We hope you enjoyed your time on the server!
 ```
-
+- You may also use the %s placeholder to refer to the Minecraft username of the Nitro Booster. This may be useful for rank or permission management.
+```yml
+# Using LuckPerms
+redemption-commands:
+  - lp user %s parent add NitroBooster
+removal-commands:
+  - lp user %s parent remove NitroBooster
+```
 - Active Nitro Boosters will be stored in `config.yml` under `nitro-boosters`.
 ```yml
 
 # List of nitro boosters
+# Format
+# Discord username with discriminator : Discord User ID : Minecraft username : Minecraft UUID
 nitro-boosters:
-  # Format
-  # Discord username with discriminator : Discord User ID : Minecraft username : Minecraft UUID
   - Notch#0001:000000000123456789:Notch:069a79f4-44e9-4726-a5be-fca90e38aaf5
 ```
 
@@ -85,10 +92,16 @@ nitro-role: ""  # ID of the nitro role
 channel-alerts: ""   # ID of channel where logs from bot are sent
 channel-main: ""     # ID of channel where command can be used
 
-redemption-command: ""   # Commands to be executed when a user redeems Nitro privileges
-remove-command: ""       # Commands to be executed when a user stops boosting the server 
+# List of redemption commands, executed when the user boosts the server
+redemption-commands:
+  - ""
+# List of removal commands, executed when the user stops boosting the server
+removal-commands:
+  - ""
 
 # List of nitro boosters
+# Format
+# Discriminated Discord username : User Discord ID : Minecraft username : Minecraft username
 nitro-boosters:
   - ""
 ```
