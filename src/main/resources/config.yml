@@ -7,12 +7,24 @@ nitro-role: ""  # ID of the nitro role
 
 channel-alerts: ""   # ID of channel where logs from bot are sent
 channel-main: ""     # ID of channel where command can be used
+channel-staff: ""    # ID of channel where staff commands can be used
 
+# List of redemption commands, executed when the user redeems Nitro privileges
 redemption-commands:
   - ""
+
+# List of removal commands, executed when the user removes their privileges or stops boosting the server
 removal-commands:
   - ""
 
 # List of nitro boosters
+# Format
+# Discriminated Discord username : User Discord ID : Minecraft username : Minecraft username
 nitro-boosters:
+  - ""
+
+# List of users banned from redemption privileges
+# Format
+# Discriminated Discord username : User Discord ID
+banned-boosters:
   - ""

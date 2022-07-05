@@ -43,10 +43,10 @@ public class NitroListener implements Listener {
                 + parts[3]
                 + ")");
     // Iterate through the list of strings from redemption-commands in the config
-    for (String redemptionCommand :
-        api.getConfig().getRedemptionCommands(event.getUser().getPlayerId().toString())) {
+    for (String redemptionCommand : api.getConfig().getRedemptionCommands()) {
       // Print the redemption command(s) in console
-      Bukkit.getConsoleSender().sendMessage("[Nitro] Executing redemption command: " + redemptionCommand);
+      Bukkit.getConsoleSender()
+          .sendMessage("[Nitro] Executing redemption command: " + redemptionCommand);
       // Execute the command
       if (redemptionCommand.contains("%s")) {
         Bukkit.getServer()
@@ -85,8 +85,7 @@ public class NitroListener implements Listener {
                 + parts[1]
                 + ") is no longer boosting the server.");
     // Iterate through the list of strings from removal-commands in the config
-    for (String removalCommand :
-        api.getConfig().getRemovalCommands(event.getUser().getPlayerId().toString())) {
+    for (String removalCommand : api.getConfig().getRemovalCommands()) {
       // Print the removal command(s) in console
       Bukkit.getConsoleSender().sendMessage("[Nitro] Executing removal command: " + removalCommand);
       // Execute the command

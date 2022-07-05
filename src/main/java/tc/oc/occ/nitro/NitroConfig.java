@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.bukkit.configuration.Configuration;
+import tc.oc.occ.nitro.data.BannedNitroUser;
 import tc.oc.occ.nitro.data.NitroUser;
 
 public class NitroConfig {
@@ -16,9 +17,11 @@ public class NitroConfig {
   private String nitroRole;
 
   private List<NitroUser> nitroUsers;
+  private List<BannedNitroUser> bannedUsers;
 
   private String alertChannel;
   private String mainChannel;
+  private String staffChannel;
 
   private List<String> redemptionCommands;
   private List<String> removalCommands;
@@ -34,6 +37,7 @@ public class NitroConfig {
     this.nitroRole = config.getString("nitro-role");
     this.alertChannel = config.getString("channel-alerts");
     this.mainChannel = config.getString("channel-main");
+    this.staffChannel = config.getString("channel-staff");
     this.redemptionCommands = config.getStringList("redemption-commands");
     this.removalCommands = config.getStringList("removal-commands");
 
@@ -42,6 +46,13 @@ public class NitroConfig {
         nitroData.stream()
             .filter(str -> str != null && !str.isEmpty())
             .map(NitroUser::of)
+            .collect(Collectors.toList());
+
+    List<String> bannedData = config.getStringList("banned-boosters");
+    this.bannedUsers =
+        bannedData.stream()
+            .filter(str -> str != null && !str.isEmpty())
+            .map(BannedNitroUser::of)
             .collect(Collectors.toList());
   }
 
@@ -69,15 +80,23 @@ public class NitroConfig {
     return mainChannel;
   }
 
+  public String getStaffChannel() {
+    return staffChannel;
+  }
+
   public List<NitroUser> getUsers() {
     return nitroUsers;
   }
 
-  public List<String> getRedemptionCommands(String playerId) {
+  public List<BannedNitroUser> getBannedUsers() {
+    return bannedUsers;
+  }
+
+  public List<String> getRedemptionCommands() {
     return redemptionCommands;
   }
 
-  public List<String> getRemovalCommands(String playerId) {
+  public List<String> getRemovalCommands() {
     return removalCommands;
   }
 

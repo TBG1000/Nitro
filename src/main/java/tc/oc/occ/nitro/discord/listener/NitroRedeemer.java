@@ -19,15 +19,14 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
     if (event.getChannel().getIdAsString().equals(config.getMainChannel())) {
-      if (event.getMessage().getContent().startsWith("!nitro")) {
+      if (event.getMessage().getContent().startsWith("!nitro-redeem")) {
         event
             .getMessageAuthor()
             .asUser()
             .ifPresent(
                 user -> {
-                  if (isNitro(user)) {
+                  if (isNitro(user) && !isBanned(user)) {
                     String[] parts = event.getMessage().getContent().split(" ");
-
                     if (parts.length == 2) {
                       String discriminatedUsername =
                           event.getMessageAuthor().getDiscriminatedName();
@@ -44,7 +43,7 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                                     + nitro.getMinecraftUsername()
                                     + "` (`"
                                     + nitro.getPlayerId().toString()
-                                    + "`).")
+                                    + "`). If you wish to change this, use `!nitro-remove` or contact a staff member.")
                             .send(event.getChannel());
                       } else {
                         WebUtils.getUUID(username)
@@ -63,7 +62,7 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                                                 + nitro.getMinecraftUsername()
                                                 + "` (`"
                                                 + nitro.getPlayerId().toString()
-                                                + "`). Thanks for boosting the server!")
+                                                + "`). If something went wrong, or you're missing in-game perks, contact a staff member. Thanks for boosting the server!")
                                         .send(event.getChannel());
                                   } else {
                                     api.alert(
@@ -77,7 +76,8 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
 
                     } else {
                       new MessageBuilder()
-                          .append(":warning: Incorrect syntax! Please use `!nitro <name>`")
+                          .append(
+                              ":warning: Incorrect syntax! Please use `!nitro-redeem <minecraft username>`. For more information, use `!nitro-help`.")
                           .send(event.getChannel());
                     }
                   } else {
@@ -85,7 +85,7 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                         .append(
                             ":negative_squared_cross_mark: "
                                 + user.getMentionTag()
-                                + " Only Nitro Boosters can use this command! Support us by boosting the server!")
+                                + " You are not allowed to use this command! If you believe this is a mistake, contact a staff member.")
                         .send(event.getChannel());
                   }
                 });

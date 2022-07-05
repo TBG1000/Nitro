@@ -7,9 +7,7 @@ import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.intent.Intent;
 import org.javacord.api.entity.server.Server;
 import tc.oc.occ.nitro.NitroConfig;
-import tc.oc.occ.nitro.discord.listener.NitroAddAlert;
-import tc.oc.occ.nitro.discord.listener.NitroRedeemer;
-import tc.oc.occ.nitro.discord.listener.NitroRemoveAlert;
+import tc.oc.occ.nitro.discord.listener.*;
 
 public class DiscordBot {
 
@@ -42,6 +40,11 @@ public class DiscordBot {
                 setAPI(api);
                 api.setMessageCacheSize(1, 60 * 60);
                 api.addListener(new NitroRedeemer(this, getConfig()));
+                api.addListener(new NitroRemover(this, getConfig()));
+                api.addListener(new NitroList(this, getConfig()));
+                api.addListener(new NitroBan(this, getConfig()));
+                api.addListener(new NitroHelp(this, getConfig()));
+                api.addListener(new NitroReload(this, getConfig()));
                 api.addListener(new NitroAddAlert(this, getConfig()));
                 api.addListener(new NitroRemoveAlert(this, getConfig()));
 

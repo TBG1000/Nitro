@@ -16,9 +16,9 @@ public class NitroAddAlert extends NitroListener implements UserRoleAddListener 
     if (isNitro(event.getRole())) {
       // ADD ROLE
       api.sendMessage(
-          ":100: Thanks for boosting the server "
+          ":tada: Thanks for boosting the server "
               + event.getUser().getMentionTag()
-              + "! Use `!nitro <minecraft username>` to claim your in-game privileges :tada:",
+              + "! Use `!nitro-redeem <minecraft username>` to claim your in-game privileges. If you need assistance, use `!nitro-help` or contact a staff member.",
           false);
     }
   }

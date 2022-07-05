@@ -27,4 +27,9 @@ public abstract class NitroListener {
   protected boolean isNitro(Role role) {
     return role.getIdAsString().equalsIgnoreCase(config.getNitroRole());
   }
+
+  protected boolean isBanned(User user) {
+    String discordId = user.getIdAsString();
+    return config.getBannedUsers().contains(discordId);
+  }
 }

@@ -31,4 +31,10 @@ public class NitroCloudy extends JavaPlugin implements Listener {
   public void callSyncEvent(Event event) {
     getServer().getScheduler().runTask(this, () -> getServer().getPluginManager().callEvent(event));
   }
+
+  public void reloadBotConfig() {
+    this.reloadConfig();
+    config.reload(getConfig());
+    bot.reload();
+  }
 }
