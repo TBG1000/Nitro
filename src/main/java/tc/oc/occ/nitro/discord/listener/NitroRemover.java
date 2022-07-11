@@ -19,6 +19,7 @@ public class NitroRemover extends NitroListener implements MessageCreateListener
   public void onMessageCreate(MessageCreateEvent event) {
     if (event.getChannel().getIdAsString().equals(config.getMainChannel())) {
       if (event.getMessage().getContent().equalsIgnoreCase("!nitro-remove")) {
+        api.deleteCommand(event);
         event
             .getMessageAuthor()
             .asUser()
@@ -29,31 +30,29 @@ public class NitroRemover extends NitroListener implements MessageCreateListener
                     if (config.getUser(discordId).isPresent()) {
                       NitroUser nitro = config.getUser(discordId).get();
                       NitroCloudy.get().callSyncEvent(new NitroUserRemoveEvent(nitro));
-                      new MessageBuilder()
-                          .append(
-                              ":white_check_mark: "
-                                  + user.getMentionTag()
-                                  + " You have removed Nitro Boosting privileges from `"
-                                  + nitro.getMinecraftUsername()
-                                  + "` (`"
-                                  + nitro.getPlayerId().toString()
-                                  + "`). You may use `!nitro-redeem <minecraft username>` to redeem them again.")
-                          .send(event.getChannel());
+                      api.sendMessage(
+                          ":white_check_mark: "
+                              + user.getMentionTag()
+                              + " You have removed Nitro Boosting privileges from `"
+                              + nitro.getMinecraftUsername()
+                              + "` (`"
+                              + nitro.getPlayerId().toString()
+                              + "`). You may use `!nitro-redeem <minecraft username>` to redeem them again.",
+                          false);
+
                     } else {
-                      new MessageBuilder()
-                          .append(
-                              ":negative_squared_cross_mark: "
-                                  + user.getMentionTag()
-                                  + " You have not yet redeemed your Nitro Boosting privileges. Use `!nitro-redeem <minecraft username>` to claim them. For more information, use `!nitro-help`.")
-                          .send(event.getChannel());
+                      api.sendMessage(
+                          ":negative_squared_cross_mark: "
+                              + user.getMentionTag()
+                              + " You have not yet redeemed your Nitro Boosting privileges. Use `!nitro-redeem <minecraft username>` to claim them. For more information, use `!nitro-help`.",
+                          false);
                     }
                   } else {
-                    new MessageBuilder()
-                        .append(
-                            ":negative_squared_cross_mark: "
-                                + user.getMentionTag()
-                                + " You are not allowed to use this command! If you believe this is a mistake, contact a staff member.")
-                        .send(event.getChannel());
+                    api.sendMessage(
+                        ":negative_squared_cross_mark: "
+                            + user.getMentionTag()
+                            + " You are not allowed to use this command! If you believe this is a mistake, contact a staff member.",
+                        false);
                   }
                 });
       }

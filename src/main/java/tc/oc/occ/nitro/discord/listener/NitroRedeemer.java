@@ -1,6 +1,5 @@
 package tc.oc.occ.nitro.discord.listener;
 
-import org.javacord.api.entity.message.MessageBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
 import tc.oc.occ.nitro.NitroCloudy;
@@ -20,6 +19,7 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
   public void onMessageCreate(MessageCreateEvent event) {
     if (event.getChannel().getIdAsString().equals(config.getMainChannel())) {
       if (event.getMessage().getContent().startsWith("!nitro-redeem")) {
+        api.deleteCommand(event);
         event
             .getMessageAuthor()
             .asUser()
@@ -35,16 +35,15 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
 
                       if (config.getUser(discordId).isPresent()) {
                         NitroUser nitro = config.getUser(discordId).get();
-                        new MessageBuilder()
-                            .append(
-                                ":negative_squared_cross_mark: "
-                                    + user.getMentionTag()
-                                    + " Your Nitro Boosting privileges have already been claimed for `"
-                                    + nitro.getMinecraftUsername()
-                                    + "` (`"
-                                    + nitro.getPlayerId().toString()
-                                    + "`). If you wish to change this, use `!nitro-remove` or contact a staff member.")
-                            .send(event.getChannel());
+                        api.sendMessage(
+                            ":negative_squared_cross_mark: "
+                                + user.getMentionTag()
+                                + " Your Nitro Boosting privileges have already been claimed for `"
+                                + nitro.getMinecraftUsername()
+                                + "` (`"
+                                + nitro.getPlayerId().toString()
+                                + "`). If you wish to change this, use `!nitro-remove` or contact a staff member.",
+                            false);
                       } else {
                         WebUtils.getUUID(username)
                             .thenAcceptAsync(
@@ -54,16 +53,15 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                                         config.addNitro(
                                             discriminatedUsername, discordId, username, uuid);
                                     NitroCloudy.get().callSyncEvent(new NitroUserAddEvent(nitro));
-                                    new MessageBuilder()
-                                        .append(
-                                            ":white_check_mark: "
-                                                + user.getMentionTag()
-                                                + " Your Nitro Boosting privileges have been claimed for `"
-                                                + nitro.getMinecraftUsername()
-                                                + "` (`"
-                                                + nitro.getPlayerId().toString()
-                                                + "`). If something went wrong, or you're missing in-game perks, contact a staff member. Thanks for boosting the server!")
-                                        .send(event.getChannel());
+                                    api.sendMessage(
+                                        ":white_check_mark: "
+                                            + user.getMentionTag()
+                                            + " Your Nitro Boosting privileges have been claimed for `"
+                                            + nitro.getMinecraftUsername()
+                                            + "` (`"
+                                            + nitro.getPlayerId().toString()
+                                            + "`). If something went wrong, or you're missing in-game perks, contact a staff member. Thanks for boosting the server!",
+                                        false);
                                   } else {
                                     api.alert(
                                         ":warning: Unable to find UUID for user "
@@ -75,18 +73,16 @@ public class NitroRedeemer extends NitroListener implements MessageCreateListene
                       }
 
                     } else {
-                      new MessageBuilder()
-                          .append(
-                              ":warning: Incorrect syntax! Please use `!nitro-redeem <minecraft username>`. For more information, use `!nitro-help`.")
-                          .send(event.getChannel());
+                      api.sendMessage(
+                          ":warning: Incorrect syntax! Please use `!nitro-redeem <minecraft username>`. For more information, use `!nitro-help`.",
+                          false);
                     }
                   } else {
-                    new MessageBuilder()
-                        .append(
-                            ":negative_squared_cross_mark: "
-                                + user.getMentionTag()
-                                + " You are not allowed to use this command! If you believe this is a mistake, contact a staff member.")
-                        .send(event.getChannel());
+                    api.sendMessage(
+                        ":negative_squared_cross_mark: "
+                            + user.getMentionTag()
+                            + " You are not allowed to use this command! If you believe this is a mistake, contact a staff member.",
+                        false);
                   }
                 });
       }

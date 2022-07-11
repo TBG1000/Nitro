@@ -1,5 +1,6 @@
 package tc.oc.occ.nitro.discord.listener;
 
+import java.util.concurrent.TimeUnit;
 import org.javacord.api.entity.message.embed.EmbedBuilder;
 import org.javacord.api.event.message.MessageCreateEvent;
 import org.javacord.api.listener.message.MessageCreateListener;
@@ -15,6 +16,7 @@ public class NitroHelp extends NitroListener implements MessageCreateListener {
   @Override
   public void onMessageCreate(MessageCreateEvent event) {
     if (event.getMessage().getContent().equalsIgnoreCase("!nitro-help")) {
+      api.deleteCommand(event);
       EmbedBuilder helpEmbed =
           new EmbedBuilder()
               .setTitle("Nitro Commands")
@@ -22,7 +24,7 @@ public class NitroHelp extends NitroListener implements MessageCreateListener {
                   "Available commands for the Nitro bot. View the source code [here](https://github.com/TBG1000/Nitro).")
               .addField(
                   "Boosters",
-                  "`!nitro-redeem <inecraft username>` - Redeem Nitro privileges\n"
+                  "`!nitro-redeem <minecraft username>` - Redeem Nitro privileges\n"
                       + "`!nitro-remove` - Removes Nitro privileges\n"
                       + "`!nitro-help` - Display this menu")
               .addField(
@@ -36,7 +38,16 @@ public class NitroHelp extends NitroListener implements MessageCreateListener {
               .setFooter(
                   "Requested by " + event.getMessageAuthor().getDiscriminatedName(),
                   event.getMessageAuthor().getAvatar());
-      event.getChannel().sendMessage(helpEmbed);
+      event
+          .getChannel()
+          .sendMessage(helpEmbed)
+          .thenAccept(
+              embed ->
+                  embed
+                      .getApi()
+                      .getThreadPool()
+                      .getScheduler()
+                      .schedule(() -> embed.delete(), 30, TimeUnit.SECONDS));
     }
   }
 }

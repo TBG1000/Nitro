@@ -1,11 +1,13 @@
 package tc.oc.occ.nitro.discord;
 
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 import org.javacord.api.DiscordApi;
 import org.javacord.api.DiscordApiBuilder;
 import org.javacord.api.entity.intent.Intent;
 import org.javacord.api.entity.server.Server;
+import org.javacord.api.event.message.MessageCreateEvent;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.discord.listener.*;
 
@@ -48,7 +50,7 @@ public class DiscordBot {
                 api.addListener(new NitroAddAlert(this, getConfig()));
                 api.addListener(new NitroRemoveAlert(this, getConfig()));
 
-                logger.info("Discord Bot (Nitro) is now active!");
+                logger.info("Discord Bot (NitroCloudy) is now active!");
               });
     }
   }
@@ -73,23 +75,55 @@ public class DiscordBot {
   }
 
   public void sendMessage(String message, boolean alert) {
-    if (api != null) {
+    if (api != null && !alert) {
       api.getServerById(config.getServer())
           .ifPresent(
-              server -> {
-                server
-                    .getChannelById(alert ? config.getAlertChannel() : config.getMainChannel())
-                    .ifPresent(
-                        channel -> {
-                          channel
-                              .asTextChannel()
-                              .ifPresent(
-                                  text -> {
-                                    text.sendMessage(message);
-                                  });
-                        });
-              });
+              server ->
+                  server
+                      .getChannelById(config.getMainChannel())
+                      .ifPresent(
+                          channel ->
+                              channel
+                                  .asTextChannel()
+                                  .ifPresent(
+                                      text ->
+                                          text.sendMessage(message)
+                                              .thenAccept(
+                                                  sentMessage ->
+                                                      sentMessage
+                                                          .getApi()
+                                                          .getThreadPool()
+                                                          .getScheduler()
+                                                          .schedule(
+                                                              () -> sentMessage.delete(),
+                                                              15,
+                                                              TimeUnit.SECONDS)))));
+    } else if (api != null && alert) {
+      api.getServerById(config.getServer())
+          .ifPresent(
+              server ->
+                  server
+                      .getChannelById(config.getAlertChannel())
+                      .ifPresent(
+                          channel ->
+                              channel
+                                  .asTextChannel()
+                                  .ifPresent(text -> text.sendMessage(message))));
     }
+  }
+
+  public void deleteCommand(MessageCreateEvent event) {
+    event
+        .getMessage()
+        .addReaction("✅")
+        .thenAccept(
+            reaction -> {
+              event
+                  .getApi()
+                  .getThreadPool()
+                  .getScheduler()
+                  .schedule(() -> event.getMessage().delete(), 10, TimeUnit.SECONDS);
+            });
   }
 
   public void reload() {
