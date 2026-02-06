@@ -22,3 +22,9 @@ removal-commands:
 # Discord username : User Discord ID : Minecraft username : Minecraft username
 nitro-boosters:
   - ""
+
+# List of revoked users (blocks /redeem)
+# Format
+# Discord username : User Discord ID : Expiration timestamp (milliseconds since epoch or "indefinite")
+revoked-users:
+  - ""

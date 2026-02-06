@@ -58,6 +58,7 @@ public class DiscordBot {
                   Commands.slash("remove", "Remove Nitro perks from connected Minecraft account"),
                   Commands.slash("revoke", "Forcefully remove in-game Nitro perks from a user")
                           .addOption(OptionType.USER, "user", "User to revoke Nitro perks from", true)
+                          .addOption(OptionType.STRING, "duration", "How long to revoke (e.g. 2h, 3d, 1w)", false)
           ).queue();
       } catch (Exception e) {
           logger.info("Failed to login to Discord:" + e.getMessage());

@@ -25,7 +25,7 @@ public class NitroHelp extends NitroListener {
             .addField(
                     "Staff",
                     "`/list <boosters|commands>`\n"
-                            + "`/revoke <Discord user>` - Forcefully remove a user's Nitro privileges\n"
+                            + "`/revoke <Discord user> [duration]` - Revoke Nitro privileges (e.g. `2h`, `3d`, `1w`)\n"
                             + "`/config-reload` - Reload the configuration file\n\n"
                             + "_Note: staff commands may only be used in the configured staff channel._", false).build();
 
