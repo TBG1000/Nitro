@@ -55,7 +55,7 @@ A number of commands are only available to staff in the configured staff channel
 - `/list <boosters|commands>`
   - `boosters`: Lists all Nitro boosters that have redeemed Nitro privileges.
   - `commands`: Lists the redemption and removal commands present in the configuration.
-- `/revoke`: Forcefully removes an active Nitro booster from the `nitro-boosters` list in the configuration. This command will execute the available removal commands for the targeted user.
+- `/revoke <user> [duration]`: Forcefully removes an active Nitro booster from the `nitro-boosters` list in the configuration and prevents the user from redeeming again for the specified duration (e.g. `2h`, `3d`, `1w`). When no duration is provided, revocation is indefinite. This command will execute the available removal commands for the targeted user.
 - `/config-reload`: Reloads the configuration file.
 
 ## Building
@@ -119,5 +119,11 @@ removal-commands:
 # Format
 # Discord username : User Discord ID : Minecraft username : Minecraft username
 nitro-boosters:
+  - ""
+
+# List of revoked users (blocks /redeem)
+# Format
+# Discord username : User Discord ID : Expiration timestamp (milliseconds since epoch or "indefinite")
+revoked-users:
   - ""
 ```

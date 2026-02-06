@@ -5,13 +5,17 @@ import net.dv8tion.jda.api.entities.User;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import org.jetbrains.annotations.NotNull;
+import tc.oc.occ.nitro.DurationUtils;
 import tc.oc.occ.nitro.NitroCloudy;
 import tc.oc.occ.nitro.NitroConfig;
 import tc.oc.occ.nitro.WebUtils;
+import tc.oc.occ.nitro.data.NitroRevocation;
 import tc.oc.occ.nitro.data.NitroUser;
 import tc.oc.occ.nitro.discord.DiscordBot;
 import tc.oc.occ.nitro.events.NitroUserAddEvent;
 
+import java.time.Instant;
+import java.util.Optional;
 import java.util.UUID;
 
 public class NitroRedeemer extends NitroListener  {
@@ -32,6 +36,23 @@ public class NitroRedeemer extends NitroListener  {
             }
             String discordUsername = member.getUser().getName();
             String discordID = member.getId();
+            if (config.removeExpiredRevocations()) {
+                config.save(NitroCloudy.get().getConfig());
+                NitroCloudy.get().saveConfig();
+            }
+            Optional<NitroRevocation> revocationEntry = config.getRevocation(discordID);
+            if (revocationEntry.isPresent()) {
+                NitroRevocation revocation = revocationEntry.get();
+                if (revocation.getExpiresAt() == null) {
+                    event.reply(":no_entry_sign: Your Nitro Boosting privileges have been revoked indefinitely. Contact a staff member if you believe this is a mistake.").setEphemeral(true).queue();
+                } else {
+                    long remainingMillis = revocation.getExpiresAt() - Instant.now().toEpochMilli();
+                    event.reply(":no_entry_sign: Your Nitro Boosting privileges have been revoked for another "
+                            + DurationUtils.formatDuration(Math.max(remainingMillis, 0))
+                            + ". Contact a staff member if you believe this is a mistake.").setEphemeral(true).queue();
+                }
+                return;
+            }
             if (config.getUser(discordID).isPresent()) {
                 NitroUser nitroUser = config.getUser(discordID).get();
                 event.reply(":no_entry_sign: Your Nitro Boosting privileges have already been claimed for "
